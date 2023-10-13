@@ -1,47 +1,47 @@
 package com.devcaotics.doapet.entities;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 public class User
 {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long Id;
+  private Long id;
 
-  @Column
+  @Enumerated(EnumType.STRING)
+  private UserType userType;
+
+  @Column(nullable = false)
   private String name;
 
-  @Column
+  @Column(nullable = false)
   private String email;
 
-  @Column
-  @Temporal(TemporalType.DATE)
-  private Date birthDate;
+  @Column(nullable = false)
+  private String senha;
+  
+  private String endereco;
 
-  @Column
-  private String login;
-
-  @Column
-  private String password;
-
-  @Embedded
-  private UserAddress address;
+  private String phoneNumber;
 
   public Long getId()
-  { return this.Id; }
+  { return this.id; }
 
-  public void setId(Long Id)
-  { this.Id = Id; }
+  public void setId(Long id)
+  { this.id = id; }
+
+  public UserType getUserType()
+  { return this.userType; }
+
+  public void setUserType(UserType userType)
+  { this.userType = userType; }
 
   public String getName()
   { return this.name; }
@@ -55,27 +55,21 @@ public class User
   public void setEmail(String email)
   { this.email = email; }
 
-  public Date getBirthDate()
-  { return this.birthDate; }
+  public String getSenha()
+  { return this.senha; }
 
-  public void setBirthDate(Date birthDate)
-  { this.birthDate = birthDate; }
+  public void setSenha(String senha)
+  { this.senha = senha; }
 
-  public String getLogin()
-  { return this.login; }
+  public String getEndereco()
+  { return this.endereco; }
 
-  public void setLogin(String login)
-  { this.login = login; }
+  public void setEndereco(String endereco)
+  { this.endereco = endereco; }
 
-  public String getPassword()
-  { return this.password; }
+  public String getPhoneNumber()
+  { return this.phoneNumber; }
 
-  public void setPassword(String password)
-  { this.password = password; }
-
-  public UserAddress getAddress()
-  { return this.address; }
-
-  public void setAddress(UserAddress address)
-  { this.address = address; }
+  public void setPhoneNumber(String phoneNumber)
+  { this.phoneNumber = phoneNumber; }
 }
