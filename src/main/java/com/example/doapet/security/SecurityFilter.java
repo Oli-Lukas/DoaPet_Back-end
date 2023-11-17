@@ -18,11 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-/**
- *
- * @author euluc
- */
-
 @Component
 public class SecurityFilter extends OncePerRequestFilter{
 
@@ -36,6 +31,7 @@ public class SecurityFilter extends OncePerRequestFilter{
         var token = this.recoverToken(request);
         if(token != null){
             var login = tokenService.validateToken(token);
+            
             UserDetails user = userRepository.findByEmail(login);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -46,6 +42,7 @@ public class SecurityFilter extends OncePerRequestFilter{
 
     private String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
+        System.out.println(authHeader);
         if(authHeader == null) return null;
         return authHeader.replace("Bearer ", "");
     }

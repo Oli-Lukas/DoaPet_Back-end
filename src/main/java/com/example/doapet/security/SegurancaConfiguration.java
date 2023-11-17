@@ -26,10 +26,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SegurancaConfiguration {
-    
+
     @Autowired
     SecurityFilter securityFilter;
-   
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpsecurity) throws Exception {
         return httpsecurity
@@ -39,19 +39,21 @@ public class SegurancaConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
+                .requestMatchers(HttpMethod.POST, "/adocao/oferta").authenticated()
+                .requestMatchers(HttpMethod.GET, "/adocao/adocoesdisponiveis").authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-    
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
 }

@@ -15,53 +15,45 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class SolicitacaoAdocao {
 
-    public enum StatusSolicitacao {
-        Pendente,
-        Aprovado,
-        Rejeitado;
-    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private SolicitacaoAdocao.StatusSolicitacao statusSolicitacao;
-
-    @ManyToOne
-    private Animal animal;
+    private StatusSolicitacao statusSolicitacao;
 
     @ManyToOne
     private Usuario novoDono;
+    
+    @ManyToOne
+    private Adocao ofertaAdocao;
 
     @Deprecated
     public SolicitacaoAdocao() {
     }
 
-    public SolicitacaoAdocao(Animal animal, Usuario novoDono) {
-        this.animal = animal;
+    public SolicitacaoAdocao(Adocao ofertaAdocao, Usuario novoDono) {
+        this.ofertaAdocao = ofertaAdocao;
+        this.statusSolicitacao = StatusSolicitacao.PENDENTE;
         this.novoDono = novoDono;
-        this.statusSolicitacao = StatusSolicitacao.Pendente;
     }
 
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
     public StatusSolicitacao getStatusSolicitacao() {
         return statusSolicitacao;
     }
 
     public void setStatusSolicitacao(StatusSolicitacao statusSolicitacao) {
         this.statusSolicitacao = statusSolicitacao;
-    }
-
-    public Animal getAnimal() {
-        return animal;
-    }
-
-    public void setAnimal(Animal animal) {
-        this.animal = animal;
     }
 
     public Usuario getNovoDono() {
@@ -71,4 +63,13 @@ public class SolicitacaoAdocao {
     public void setNovoDono(Usuario novoDono) {
         this.novoDono = novoDono;
     }
+
+    public Adocao getOfertaAdocao() {
+        return ofertaAdocao;
+    }
+
+    public void setOfertaAdocao(Adocao ofertaAdocao) {
+        this.ofertaAdocao = ofertaAdocao;
+    }
+    
 }

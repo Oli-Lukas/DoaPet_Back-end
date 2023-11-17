@@ -40,9 +40,6 @@ public class Usuario implements UserDetails {
     private String endereco;
     private String numeroTelefone;
 
-    @OneToMany(mappedBy = "responsavel")
-    private List<Animal> animais;
-
     @OneToMany(mappedBy = "novoDono")
     private List<SolicitacaoAdocao> solicitacoes;
 
@@ -68,6 +65,11 @@ public class Usuario implements UserDetails {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
 
     public String getNome() {
         return nome;
@@ -115,14 +117,6 @@ public class Usuario implements UserDetails {
 
     public void setNumeroTelefone(String numeroTelefone) {
         this.numeroTelefone = numeroTelefone;
-    }
-
-    public List<Animal> getAnimais() {
-        return animais;
-    }
-
-    public void setAnimais(List<Animal> animais) {
-        this.animais = animais;
     }
 
     public List<SolicitacaoAdocao> getSolicitacoes() {
