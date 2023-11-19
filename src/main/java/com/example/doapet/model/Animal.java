@@ -20,10 +20,13 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false)
     private String especie;
+
     private String raca;
     private double peso;
     private int idade;
@@ -36,8 +39,7 @@ public class Animal {
     private Adocao ofertaAdocao;
 
     @Deprecated
-    public Animal() {
-    }
+    public Animal() {}
 
     public Animal(String nome, String especie,String raca, double peso, int idade, String descricao, Blob foto) {
         this.nome = nome;
@@ -121,11 +123,4 @@ public class Animal {
     public void setOfertaAdocao(Adocao ofertaAdocao) {
         this.ofertaAdocao = ofertaAdocao;
     }
-    
-    
-    
-    
-    
-    
-
 }

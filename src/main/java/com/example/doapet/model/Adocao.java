@@ -41,8 +41,7 @@ public class Adocao {
     private Animal animalAdocao;
 
     @Deprecated
-    public Adocao() {
-    }
+    public Adocao() {}
 
     public Adocao(String titulo, String descricao, Usuario donoDaDivulgacao, Animal animalAdocao) {
         this.statusAdocao = StatusAdocao.PENDENTE;
@@ -52,7 +51,6 @@ public class Adocao {
         this.localizacao = this.donoDaDivulgacao.getEndereco();
         this.animalAdocao = animalAdocao;
     }
-    
     
     public Long getId() {
         return id;
@@ -117,8 +115,4 @@ public class Adocao {
     public void setAnimalAdocao(Animal animalAdocao) {
         this.animalAdocao = animalAdocao;
     }
-    
-    
-    
-    
 }

@@ -25,15 +25,17 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String nome;
+
     @Column(nullable = false, unique = true)
     private String email;
+    
     @Column(nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)
-
     private TipoUsuario tipoUsuario;
 
     private String endereco;
@@ -142,8 +144,6 @@ public class Usuario implements UserDetails {
         this.divulgacoesDeAdocao = divulgacoesDeAdocao;
     }
     
-    
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.tipoUsuario == TipoUsuario.INDIVIDUAL) {
@@ -182,5 +182,4 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

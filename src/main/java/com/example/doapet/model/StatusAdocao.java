@@ -9,6 +9,7 @@ package com.example.doapet.model;
  * @author euluc
  */
 public enum StatusAdocao {
+    
     PENDENTE("PENDENTE"),
     APROVADO("APROVADO");
     
@@ -21,5 +22,4 @@ public enum StatusAdocao {
     public String getStatus() {
         return status;
     }
-    
 }

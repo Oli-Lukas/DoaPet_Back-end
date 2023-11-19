@@ -9,6 +9,7 @@ package com.example.doapet.model;
  * @author euluc
  */
 public enum TipoUsuario {
+    
     ONG("ONG"),
     INDIVIDUAL("INDIVIDUAL");
 

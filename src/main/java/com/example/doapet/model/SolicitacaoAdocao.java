@@ -29,8 +29,7 @@ public class SolicitacaoAdocao {
     private Adocao ofertaAdocao;
 
     @Deprecated
-    public SolicitacaoAdocao() {
-    }
+    public SolicitacaoAdocao() {}
 
     public SolicitacaoAdocao(Adocao ofertaAdocao, Usuario novoDono) {
         this.ofertaAdocao = ofertaAdocao;
@@ -69,5 +68,4 @@ public class SolicitacaoAdocao {
     public void setOfertaAdocao(Adocao ofertaAdocao) {
         this.ofertaAdocao = ofertaAdocao;
     }
-    
 }

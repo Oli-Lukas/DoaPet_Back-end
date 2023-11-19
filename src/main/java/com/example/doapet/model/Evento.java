@@ -37,12 +37,8 @@ public class Evento {
     }
     
     @Deprecated
-    public Evento() {
-        
-    }
+    public Evento() {}
     
-    // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -91,4 +87,3 @@ public class Evento {
         this.organizador = organizador;
     }
 }
-
