@@ -12,10 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-@Entity
+@Entity(name = "SolicitacaoAdocao")
 public class SolicitacaoAdocao {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,11 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+
 import java.sql.Blob;
 
-@Entity
+@Entity(name = "Animal")
 public class Animal {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
