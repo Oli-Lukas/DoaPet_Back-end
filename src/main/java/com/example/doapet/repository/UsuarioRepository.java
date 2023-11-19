@@ -14,4 +14,5 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
     UserDetails findByEmail(String email);
+    Usuario save(Usuario u);
 }
