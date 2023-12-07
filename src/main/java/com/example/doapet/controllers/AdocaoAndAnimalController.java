@@ -65,10 +65,10 @@ public class AdocaoAndAnimalController {
         return ResponseEntity.ok().build();
     }
     
-    @GetMapping("/adocoesdisponiveis")
-    public ResponseEntity getAdocoesDisponiveis() {
+    @GetMapping("/adocoes-disponiveis")
+    public ResponseEntity<List<Adocao>> getAdocoesDisponiveis() {
         List<Adocao> currentAdocoes = repoAdocao.findByStatusAdocao(StatusAdocao.PENDENTE);
-        return new ResponseEntity<>(currentAdocoes, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(currentAdocoes);
     }
 
 }
