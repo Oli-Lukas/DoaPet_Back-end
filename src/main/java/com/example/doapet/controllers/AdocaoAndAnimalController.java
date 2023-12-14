@@ -44,25 +44,40 @@ public class AdocaoAndAnimalController {
     private AnimalRepository repoAnimal;
 
     @PostMapping("/oferta")
-    public ResponseEntity cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO data) throws IOException, SQLException {
-
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        Usuario currentUsuario = (Usuario) repoUsuario.findByEmail(userDetails.getUsername());
-
+    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO data) throws IOException, SQLException
+    {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                                                    .getContext()
+                                                    .getAuthentication()
+                                                    .getPrincipal();
         
+        Usuario currentUsuario = (Usuario) repoUsuario.findByEmail(userDetails.getUsername());
         
         byte bytes[] = data.fotoAnim().getBytes();
-        Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-        Animal currentAnimal = new Animal(data.nomeAnim(),data.especieAnim(), data.racaAnim(), data.pesoAnim(), data.idadeAnim(), data.descricaoAnim(), blob);
-        
-        
-        Adocao currentAdocao = new Adocao(data.tituloAdoc(),data.descricaoAdoc(),currentUsuario, currentAnimal);
+        Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
+
+        Animal currentAnimal = new Animal(
+            data.nomeAnim(),
+            data.especieAnim(),
+            data.racaAnim(),
+            data.pesoAnim(),
+            data.idadeAnim(),
+            data.descricaoAnim(),
+            blob
+        );
+        Adocao currentAdocao = new Adocao(
+            data.tituloAdoc(),
+            data.descricaoAdoc(),
+            currentUsuario,
+            currentAnimal
+        );
         
         repoAnimal.save(currentAnimal);
         repoAdocao.save(currentAdocao);
         
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
     
     @GetMapping("/adocoes-disponiveis")
