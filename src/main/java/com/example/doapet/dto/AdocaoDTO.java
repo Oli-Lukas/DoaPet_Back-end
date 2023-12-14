@@ -10,6 +10,14 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author ALUNO
  */
-public record AdocaoDTO(String tituloAdoc, String descricaoAdoc, String nomeAnim,String especieAnim,String racaAnim,double pesoAnim, int idadeAnim, String descricaoAnim, MultipartFile fotoAnim) {
-    
-}
+public record AdocaoDTO(
+  String  tituloAdocao,
+  String  descricaoAdocao,
+  String  nomeAnimal,
+  String  especieAnimal,
+  String  racaAnimal,
+  Double  pesoAnimal,
+  Integer idadeAnimal,
+  String  descricaoAnimal,
+  MultipartFile fotoAnimal
+) {}

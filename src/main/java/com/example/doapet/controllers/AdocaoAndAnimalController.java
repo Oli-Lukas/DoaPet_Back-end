@@ -53,21 +53,21 @@ public class AdocaoAndAnimalController {
         
         Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername());
         
-        byte bytes[] = adocaoDTO.fotoAnim().getBytes();
+        byte bytes[] = adocaoDTO.fotoAnimal().getBytes();
         Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
 
         Animal currentAnimal = new Animal(
-            adocaoDTO.nomeAnim(),
-            adocaoDTO.especieAnim(),
-            adocaoDTO.racaAnim(),
-            adocaoDTO.pesoAnim(),
-            adocaoDTO.idadeAnim(),
-            adocaoDTO.descricaoAnim(),
+            adocaoDTO.nomeAnimal(),
+            adocaoDTO.especieAnimal(),
+            adocaoDTO.racaAnimal(),
+            adocaoDTO.pesoAnimal(),
+            adocaoDTO.idadeAnimal(),
+            adocaoDTO.descricaoAnimal(),
             blob
         );
         Adocao currentAdocao = new Adocao(
-            adocaoDTO.tituloAdoc(),
-            adocaoDTO.descricaoAdoc(),
+            adocaoDTO.tituloAdocao(),
+            adocaoDTO.descricaoAdocao(),
             currentUsuario,
             currentAnimal
         );
