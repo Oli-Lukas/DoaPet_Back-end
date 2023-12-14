@@ -12,6 +12,7 @@ import com.example.doapet.repository.UsuarioRepository;
 import com.example.doapet.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,13 +43,16 @@ public class AuthController {
     private TokenService tokenService;
     
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO data) {
+
         UsernamePasswordAuthenticationToken userNamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        var auth = this.authManager.authenticate(userNamePassword);
-        
+
+        var auth  = this.authManager.authenticate(userNamePassword);
         var token = tokenService.generateToken(((Usuario)auth.getPrincipal()).getEmail());
         
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new LoginResponseDTO(token));
     }
     
     @PostMapping("/cadastro")
