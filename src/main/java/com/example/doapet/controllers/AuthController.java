@@ -37,7 +37,7 @@ public class AuthController {
     private AuthenticationManager authManager;
     
     @Autowired
-    private UsuarioRepository repo;
+    private UsuarioRepository usuarioRepository;
     
     @Autowired
     private TokenService tokenService;
@@ -58,7 +58,7 @@ public class AuthController {
     @PostMapping("/cadastro")
     public ResponseEntity<Void> cadastro(@RequestBody @Valid CadastroDTO data) {
 
-        if(this.repo.findByEmail(data.email()) != null)
+        if(this.usuarioRepository.findByEmail(data.email()) != null)
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
@@ -66,7 +66,7 @@ public class AuthController {
         String  senhaCrip   = new BCryptPasswordEncoder().encode(data.senha());
         Usuario currentUser = new Usuario(data.nome(), data.email(), senhaCrip, data.tipoUsuario(), data.endereco(), data.telefone());
         
-        this.repo.save(currentUser);
+        this.usuarioRepository.save(currentUser);
         
         return ResponseEntity
                 .status(HttpStatus.OK)
