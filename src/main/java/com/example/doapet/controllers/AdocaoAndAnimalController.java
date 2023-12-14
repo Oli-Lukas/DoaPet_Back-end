@@ -44,7 +44,7 @@ public class AdocaoAndAnimalController {
     private AnimalRepository animalRepository;
 
     @PostMapping("/oferta")
-    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO data) throws IOException, SQLException
+    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO adocaoDTO) throws IOException, SQLException
     {
         UserDetails userDetails = (UserDetails) SecurityContextHolder
                                                     .getContext()
@@ -53,21 +53,21 @@ public class AdocaoAndAnimalController {
         
         Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername());
         
-        byte bytes[] = data.fotoAnim().getBytes();
+        byte bytes[] = adocaoDTO.fotoAnim().getBytes();
         Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
 
         Animal currentAnimal = new Animal(
-            data.nomeAnim(),
-            data.especieAnim(),
-            data.racaAnim(),
-            data.pesoAnim(),
-            data.idadeAnim(),
-            data.descricaoAnim(),
+            adocaoDTO.nomeAnim(),
+            adocaoDTO.especieAnim(),
+            adocaoDTO.racaAnim(),
+            adocaoDTO.pesoAnim(),
+            adocaoDTO.idadeAnim(),
+            adocaoDTO.descricaoAnim(),
             blob
         );
         Adocao currentAdocao = new Adocao(
-            data.tituloAdoc(),
-            data.descricaoAdoc(),
+            adocaoDTO.tituloAdoc(),
+            adocaoDTO.descricaoAdoc(),
             currentUsuario,
             currentAnimal
         );
