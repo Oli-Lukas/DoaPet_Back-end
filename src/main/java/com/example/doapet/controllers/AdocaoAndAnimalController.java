@@ -35,13 +35,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdocaoAndAnimalController {
 
     @Autowired
-    private UsuarioRepository repoUsuario;
+    private UsuarioRepository usuarioRepository;
     
     @Autowired
-    private AdocaoRepository repoAdocao;
+    private AdocaoRepository adocaoRepository;
     
     @Autowired
-    private AnimalRepository repoAnimal;
+    private AnimalRepository animalRepository;
 
     @PostMapping("/oferta")
     public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO data) throws IOException, SQLException
@@ -51,7 +51,7 @@ public class AdocaoAndAnimalController {
                                                     .getAuthentication()
                                                     .getPrincipal();
         
-        Usuario currentUsuario = (Usuario) repoUsuario.findByEmail(userDetails.getUsername());
+        Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername());
         
         byte bytes[] = data.fotoAnim().getBytes();
         Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
@@ -72,8 +72,8 @@ public class AdocaoAndAnimalController {
             currentAnimal
         );
         
-        repoAnimal.save(currentAnimal);
-        repoAdocao.save(currentAdocao);
+        animalRepository.save(currentAnimal);
+        adocaoRepository.save(currentAdocao);
         
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -82,7 +82,7 @@ public class AdocaoAndAnimalController {
     
     @GetMapping("/adocoes-disponiveis")
     public ResponseEntity<List<Adocao>> getAdocoesDisponiveis() {
-        List<Adocao> currentAdocoes = repoAdocao.findByStatusAdocao(StatusAdocao.PENDENTE);
+        List<Adocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
         return ResponseEntity.status(HttpStatus.OK).body(currentAdocoes);
     }
 
