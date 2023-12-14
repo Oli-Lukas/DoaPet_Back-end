@@ -56,16 +56,20 @@ public class AuthController {
     }
     
     @PostMapping("/cadastro")
-    public ResponseEntity cadastro(@RequestBody @Valid CadastroDTO data) {
-        if(this.repo.findByEmail(data.email()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Void> cadastro(@RequestBody @Valid CadastroDTO data) {
+
+        if(this.repo.findByEmail(data.email()) != null)
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
         
-        String senhaCrip = new BCryptPasswordEncoder().encode(data.senha());
+        String  senhaCrip   = new BCryptPasswordEncoder().encode(data.senha());
         Usuario currentUser = new Usuario(data.nome(), data.email(), senhaCrip, data.tipoUsuario(), data.endereco(), data.telefone());
         
         this.repo.save(currentUser);
         
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 }
