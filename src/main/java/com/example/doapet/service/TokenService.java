@@ -8,7 +8,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.example.doapet.model.Usuario;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -37,9 +36,7 @@ public class TokenService {
             return token;
         } catch(JWTCreationException error) {
             throw new RuntimeException("Erro ao gerar Token", error);
-
         }
-
     }
     
     public String validateToken(String token) {
@@ -54,7 +51,6 @@ public class TokenService {
            
         } catch(JWTVerificationException error) {
             return "";
-
         }
     }
 
