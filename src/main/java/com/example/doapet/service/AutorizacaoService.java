@@ -4,6 +4,7 @@
  */
 package com.example.doapet.service;
 
+import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +20,14 @@ import org.springframework.stereotype.Service;
 public class AutorizacaoService implements UserDetailsService {
     
     @Autowired
-    UsuarioRepository repo;
+    UsuarioRepository usuarioRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repo.findByEmail(username);
+        
+        Usuario usuario = usuarioRepository.findByEmail(username);
+        return usuario;
+        
+        // return usuarioRepository.findByEmail(username);
     }
-    
 }

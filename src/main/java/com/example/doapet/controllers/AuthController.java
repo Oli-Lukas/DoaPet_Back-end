@@ -4,13 +4,17 @@
  */
 package com.example.doapet.controllers;
 
+import com.example.doapet.config.JwtService;
 import com.example.doapet.dto.CadastroDTO;
 import com.example.doapet.dto.LoginDTO;
 import com.example.doapet.dto.LoginResponseDTO;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.UsuarioRepository;
-import com.example.doapet.service.TokenService;
 import jakarta.validation.Valid;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,15 +44,21 @@ public class AuthController {
     private UsuarioRepository usuarioRepository;
     
     @Autowired
-    private TokenService tokenService;
+    private JwtService jwtService;
     
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginDTO data) {
 
         UsernamePasswordAuthenticationToken userNamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
 
+        Usuario usuario = usuarioRepository.findByEmail(data.email());
+
         var auth  = this.authManager.authenticate(userNamePassword);
-        var token = tokenService.generateToken(((Usuario)auth.getPrincipal()).getEmail());
+        // var token = tokenService.generateToken(((Usuario)auth.getPrincipal()).getEmail());
+        Map<String, Object> claims = new HashMap<String, Object>();
+        claims.put("email", data.email());
+
+        String token = jwtService.generateToken(claims, usuario);
         
         return ResponseEntity
                 .status(HttpStatus.OK)
