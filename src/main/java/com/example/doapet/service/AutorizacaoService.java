@@ -23,7 +23,7 @@ public class AutorizacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repo.findByEmail(username);
+        return repo.findByEmail(username).get();
     }
     
 }

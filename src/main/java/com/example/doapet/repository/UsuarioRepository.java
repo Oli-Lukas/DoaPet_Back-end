@@ -5,14 +5,13 @@
 package com.example.doapet.repository;
 
 import com.example.doapet.model.Usuario;
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  *
  * @author ALUNO
  */
 public interface UsuarioRepository extends CrudRepository<Usuario, Long>{
-    UserDetails findByEmail(String email);
-    Usuario save(Usuario u);
+    Optional<Usuario> findByEmail(String email);
 }

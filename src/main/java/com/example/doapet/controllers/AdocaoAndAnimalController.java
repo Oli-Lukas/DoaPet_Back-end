@@ -51,7 +51,7 @@ public class AdocaoAndAnimalController {
                                                     .getAuthentication()
                                                     .getPrincipal();
         
-        Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername());
+        Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername()).get();
         
         byte bytes[] = adocaoDTO.fotoAnimal().getBytes();
         Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
