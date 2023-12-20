@@ -37,10 +37,10 @@ public class SegurancaConfiguration {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
-                .requestMatchers(HttpMethod.POST, "/adocao/oferta").authenticated()
-                .requestMatchers(HttpMethod.GET, "/adocao/adocoesdisponiveis").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/adocao/oferta").authenticated()
+                    .requestMatchers(HttpMethod.GET , "/adocao/adocoesdisponiveis").authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -55,5 +55,4 @@ public class SegurancaConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
