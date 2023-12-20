@@ -58,7 +58,9 @@ public class AuthController {
     @PostMapping("/cadastro")
     public ResponseEntity<Void> cadastro(@RequestBody @Valid CadastroDTO data) {
 
-        if(this.usuarioRepository.findByEmail(data.email()) != null)
+        boolean previousRegisteredEmail = usuarioRepository.findByEmail(data.email()).isPresent();
+
+        if (previousRegisteredEmail)
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();

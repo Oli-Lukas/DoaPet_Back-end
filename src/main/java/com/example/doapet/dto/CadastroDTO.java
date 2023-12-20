@@ -10,6 +10,11 @@ import com.example.doapet.model.TipoUsuario;
  *
  * @author euluc
  */
-public record CadastroDTO(String nome, String email, String senha, String endereco, String telefone, TipoUsuario tipoUsuario ) {
-
-}
+public record CadastroDTO(
+  String nome,
+  String email,
+  String senha,
+  String endereco,
+  String telefone,
+  TipoUsuario tipoUsuario
+) {}
