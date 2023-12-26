@@ -4,6 +4,7 @@
  */
 package com.example.doapet.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,8 +36,13 @@ public class OfertaAdocao {
     @Enumerated(EnumType.STRING)
     private StatusAdocao statusAdocao;
     
+    @Column(nullable = false)
     private String titulo;
+
+    @Column(nullable = true)
     private String descricao;
+
+    @Column(nullable = true)
     private String localizacao;
     
     @ManyToOne
