@@ -46,7 +46,10 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
 
+    @Column(nullable = false)
     private String endereco;
+
+    @Column(nullable = true)
     private String numeroTelefone;
 
     @OneToMany(mappedBy = "novoDono")
