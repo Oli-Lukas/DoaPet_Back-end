@@ -9,10 +9,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "Evento")
 public class Evento {
 
@@ -27,63 +35,5 @@ public class Evento {
 
     @ManyToOne
     private Usuario organizador;
-
-    public Evento(String nomeDoEvento, String descricao, LocalDateTime dataDoEvento, String endereco, Usuario organizador) {
-        this.nomeDoEvento = nomeDoEvento;
-        this.descricao = descricao;
-        this.dataDoEvento = dataDoEvento;
-        this.endereco = endereco;
-        this.organizador = organizador;
-    }
     
-    @Deprecated
-    public Evento() {}
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getNomeDoEvento() {
-        return nomeDoEvento;
-    }
-
-    public void setNomeDoEvento(String nomeDoEvento) {
-        this.nomeDoEvento = nomeDoEvento;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public LocalDateTime getDataDoEvento() {
-        return dataDoEvento;
-    }
-
-    public void setDataDoEvento(LocalDateTime dataDoEvento) {
-        this.dataDoEvento = dataDoEvento;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public Usuario getOrganizador() {
-        return organizador;
-    }
-
-    public void setOrganizador(Usuario organizador) {
-        this.organizador = organizador;
-    }
 }

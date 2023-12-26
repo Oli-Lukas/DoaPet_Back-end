@@ -14,9 +14,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "Adocao")
 public class Adocao {
     
@@ -40,79 +48,17 @@ public class Adocao {
     @OneToOne
     private Animal animalAdocao;
 
-    @Deprecated
-    public Adocao() {}
-
-    public Adocao(String titulo, String descricao, Usuario donoDaDivulgacao, Animal animalAdocao) {
+    public Adocao(
+        String titulo,
+        String descricao,
+        Usuario donoDaDivulgacao,
+        Animal animalAdocao
+    ) {
         this.statusAdocao = StatusAdocao.PENDENTE;
         this.titulo = titulo;
         this.descricao = descricao;
         this.donoDaDivulgacao = donoDaDivulgacao;
         this.localizacao = this.donoDaDivulgacao.getEndereco();
-        this.animalAdocao = animalAdocao;
-    }
-    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public StatusAdocao getStatusAdocao() {
-        return statusAdocao;
-    }
-
-    public void setStatusAdocao(StatusAdocao statusAdocao) {
-        this.statusAdocao = statusAdocao;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
-    }
-
-    public Usuario getDonoDaDivulgacao() {
-        return donoDaDivulgacao;
-    }
-
-    public void setDonoDaDivulgacao(Usuario donoDaDivulgacao) {
-        this.donoDaDivulgacao = donoDaDivulgacao;
-    }
-
-    public List<SolicitacaoAdocao> getSolicitacoesDeAdocao() {
-        return solicitacoesDeAdocao;
-    }
-
-    public void setSolicitacoesDeAdocao(List<SolicitacaoAdocao> solicitacoesDeAdocao) {
-        this.solicitacoesDeAdocao = solicitacoesDeAdocao;
-    }
-
-    public Animal getAnimalAdocao() {
-        return animalAdocao;
-    }
-
-    public void setAnimalAdocao(Animal animalAdocao) {
         this.animalAdocao = animalAdocao;
     }
 }

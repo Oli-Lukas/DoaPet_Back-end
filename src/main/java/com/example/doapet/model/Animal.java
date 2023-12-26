@@ -11,9 +11,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "Animal")
 public class Animal {
 
@@ -28,8 +36,8 @@ public class Animal {
     private String especie;
 
     private String raca;
-    private double peso;
-    private int idade;
+    private Double peso;
+    private Integer idade;
     private String descricao;
     
     @Lob
@@ -38,10 +46,15 @@ public class Animal {
     @OneToOne(mappedBy = "animalAdocao")
     private Adocao ofertaAdocao;
 
-    @Deprecated
-    public Animal() {}
-
-    public Animal(String nome, String especie,String raca, double peso, int idade, String descricao, Blob foto) {
+    public Animal(
+        String nome,
+        String especie,
+        String raca,
+        double peso,
+        int idade,
+        String descricao,
+        Blob foto
+    ) {
         this.nome = nome;
         this.especie = especie;
         this.raca = raca;
@@ -49,78 +62,5 @@ public class Animal {
         this.idade = idade;
         this.descricao = descricao;
         this.foto = foto;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEspecie() {
-        return especie;
-    }
-
-    public void setEspecie(String especie) {
-        this.especie = especie;
-    }
-
-    public String getRaca() {
-        return raca;
-    }
-
-    public void setRaca(String raca) {
-        this.raca = raca;
-    }
-
-    public double getPeso() {
-        return peso;
-    }
-
-    public void setPeso(double peso) {
-        this.peso = peso;
-    }
-
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public Blob getFoto() {
-        return foto;
-    }
-
-    public void setFoto(Blob foto) {
-        this.foto = foto;
-    }
-
-
-    public Adocao getOfertaAdocao() {
-        return ofertaAdocao;
-    }
-
-    public void setOfertaAdocao(Adocao ofertaAdocao) {
-        this.ofertaAdocao = ofertaAdocao;
     }
 }

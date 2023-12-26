@@ -12,14 +12,16 @@ import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.AdocaoRepository;
 import com.example.doapet.repository.AnimalRepository;
 import com.example.doapet.repository.UsuarioRepository;
-import jakarta.validation.Valid;
+
+import lombok.RequiredArgsConstructor;
+
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,20 +34,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("adocao")
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class AdocaoAndAnimalController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    @Autowired
-    private AdocaoRepository adocaoRepository;
-    
-    @Autowired
-    private AnimalRepository animalRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final AdocaoRepository adocaoRepository;
+    private final AnimalRepository animalRepository;
 
     @PostMapping("/oferta")
-    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute @Valid AdocaoDTO adocaoDTO) throws IOException, SQLException
+    @PreAuthorize("hasAnyAuthority('individual', 'ong')")
+    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute AdocaoDTO adocaoDTO) throws IOException, SQLException
     {
+        System.out.println("Executou!!!");
         UserDetails userDetails = (UserDetails) SecurityContextHolder
                                                     .getContext()
                                                     .getAuthentication()

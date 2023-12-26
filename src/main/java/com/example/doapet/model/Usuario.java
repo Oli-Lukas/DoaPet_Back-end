@@ -12,6 +12,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +23,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "Usuario")
 public class Usuario implements UserDetails {
 
@@ -50,11 +58,14 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "donoDaDivulgacao")
     private List<Adocao> divulgacoesDeAdocao;
 
-    @Deprecated
-    public Usuario() {
-    }
-
-    public Usuario(String nome, String email, String senha, TipoUsuario tipoUsuario, String endereco, String numeroTelefone) {
+    public Usuario(
+        String nome,
+        String email,
+        String senha,
+        TipoUsuario tipoUsuario,
+        String endereco,
+        String numeroTelefone
+    ) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;

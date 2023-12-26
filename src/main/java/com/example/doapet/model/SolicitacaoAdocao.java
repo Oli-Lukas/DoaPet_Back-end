@@ -11,7 +11,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "SolicitacaoAdocao")
 public class SolicitacaoAdocao {
 
@@ -27,45 +35,4 @@ public class SolicitacaoAdocao {
     
     @ManyToOne
     private Adocao ofertaAdocao;
-
-    @Deprecated
-    public SolicitacaoAdocao() {}
-
-    public SolicitacaoAdocao(Adocao ofertaAdocao, Usuario novoDono) {
-        this.ofertaAdocao = ofertaAdocao;
-        this.statusSolicitacao = StatusSolicitacao.PENDENTE;
-        this.novoDono = novoDono;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public StatusSolicitacao getStatusSolicitacao() {
-        return statusSolicitacao;
-    }
-
-    public void setStatusSolicitacao(StatusSolicitacao statusSolicitacao) {
-        this.statusSolicitacao = statusSolicitacao;
-    }
-
-    public Usuario getNovoDono() {
-        return novoDono;
-    }
-
-    public void setNovoDono(Usuario novoDono) {
-        this.novoDono = novoDono;
-    }
-
-    public Adocao getOfertaAdocao() {
-        return ofertaAdocao;
-    }
-
-    public void setOfertaAdocao(Adocao ofertaAdocao) {
-        this.ofertaAdocao = ofertaAdocao;
-    }
 }

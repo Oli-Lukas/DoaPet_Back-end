@@ -1,6 +1,5 @@
 package com.example.doapet.components;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -9,15 +8,14 @@ import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.UsuarioRepository;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class ConstrutorDeUsuarios {
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  private UsuarioRepository usuarioRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final UsuarioRepository usuarioRepository;
 
   @PostConstruct
   public void init() {
