@@ -35,9 +35,16 @@ public class Animal {
     @Column(nullable = false)
     private String especie;
 
+    @Column(nullable = true)
     private String raca;
+
+    @Column(nullable = true)
     private Double peso;
+
+    @Column(nullable = true)
     private Integer idade;
+
+    @Column(nullable = false)
     private String descricao;
     
     @Lob
