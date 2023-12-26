@@ -12,6 +12,5 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author ALUNO
  */
-public interface SolicitacaoAdocaoRepository extends CrudRepository<SolicitacaoAdocao, Long> {
-    
-}
+public interface SolicitacaoAdocaoRepository extends CrudRepository<SolicitacaoAdocao, Long>
+{}

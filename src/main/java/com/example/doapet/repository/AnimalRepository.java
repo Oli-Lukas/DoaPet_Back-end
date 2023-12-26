@@ -13,6 +13,5 @@ import org.springframework.stereotype.Repository;
  * @author ALUNO
  */
 @Repository
-public interface AnimalRepository extends CrudRepository<Animal, Long>{
-    
-}
+public interface AnimalRepository extends CrudRepository<Animal, Long>
+{}

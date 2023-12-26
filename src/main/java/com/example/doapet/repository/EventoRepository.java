@@ -11,6 +11,5 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author ALUNO
  */
-public interface EventoRepository extends CrudRepository<Evento, Long>{
-    
-}
+public interface EventoRepository extends CrudRepository<Evento, Long>
+{}
