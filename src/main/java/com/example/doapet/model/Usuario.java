@@ -56,7 +56,7 @@ public class Usuario implements UserDetails {
     private List<Evento> eventos;
     
     @OneToMany(mappedBy = "donoDaDivulgacao")
-    private List<Adocao> divulgacoesDeAdocao;
+    private List<OfertaAdocao> divulgacoesDeAdocao;
 
     public Usuario(
         String nome,
@@ -74,87 +74,6 @@ public class Usuario implements UserDetails {
         this.numeroTelefone = numeroTelefone;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public String getNumeroTelefone() {
-        return numeroTelefone;
-    }
-
-    public void setNumeroTelefone(String numeroTelefone) {
-        this.numeroTelefone = numeroTelefone;
-    }
-
-    public List<SolicitacaoAdocao> getSolicitacoes() {
-        return solicitacoes;
-    }
-
-    public void setSolicitacoes(List<SolicitacaoAdocao> solicitacoes) {
-        this.solicitacoes = solicitacoes;
-    }
-
-    public List<Evento> getEventos() {
-        return eventos;
-    }
-
-    public void setEventos(List<Evento> eventos) {
-        this.eventos = eventos;
-    }
-
-    public List<Adocao> getDivulgacoesDeAdocao() {
-        return divulgacoesDeAdocao;
-    }
-
-    public void setDivulgacoesDeAdocao(List<Adocao> divulgacoesDeAdocao) {
-        this.divulgacoesDeAdocao = divulgacoesDeAdocao;
-    }
-    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.tipoUsuario == TipoUsuario.INDIVIDUAL) {

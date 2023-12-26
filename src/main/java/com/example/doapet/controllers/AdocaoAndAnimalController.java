@@ -5,8 +5,8 @@
 package com.example.doapet.controllers;
 
 import com.example.doapet.dto.AdocaoDTO;
-import com.example.doapet.model.Adocao;
 import com.example.doapet.model.Animal;
+import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.StatusAdocao;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.AdocaoRepository;
@@ -65,7 +65,7 @@ public class AdocaoAndAnimalController {
             adocaoDTO.descricaoAnimal(),
             blob
         );
-        Adocao currentAdocao = new Adocao(
+        OfertaAdocao currentAdocao = new OfertaAdocao(
             adocaoDTO.tituloAdocao(),
             adocaoDTO.descricaoAdocao(),
             currentUsuario,
@@ -81,8 +81,8 @@ public class AdocaoAndAnimalController {
     }
     
     @GetMapping("/adocoes-disponiveis")
-    public ResponseEntity<List<Adocao>> getAdocoesDisponiveis() {
-        List<Adocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
+    public ResponseEntity<List<OfertaAdocao>> getAdocoesDisponiveis() {
+        List<OfertaAdocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
         return ResponseEntity.status(HttpStatus.OK).body(currentAdocoes);
     }
 

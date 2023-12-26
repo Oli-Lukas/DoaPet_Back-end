@@ -34,5 +34,5 @@ public class SolicitacaoAdocao {
     private Usuario novoDono;
     
     @ManyToOne
-    private Adocao ofertaAdocao;
+    private OfertaAdocao ofertaAdocao;
 }

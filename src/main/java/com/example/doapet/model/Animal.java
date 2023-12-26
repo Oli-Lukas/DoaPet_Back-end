@@ -44,7 +44,7 @@ public class Animal {
     private Blob foto;
     
     @OneToOne(mappedBy = "animalAdocao")
-    private Adocao ofertaAdocao;
+    private OfertaAdocao ofertaAdocao;
 
     public Animal(
         String nome,

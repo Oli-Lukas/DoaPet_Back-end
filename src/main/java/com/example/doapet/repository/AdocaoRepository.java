@@ -5,7 +5,7 @@
 package com.example.doapet.repository;
 
 
-import com.example.doapet.model.Adocao;
+import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.StatusAdocao;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
@@ -14,6 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author ALUNO
  */
-public interface AdocaoRepository extends CrudRepository<Adocao, Long>{
-    List<Adocao> findByStatusAdocao(StatusAdocao statusAdocao);
+public interface AdocaoRepository extends CrudRepository<OfertaAdocao, Long>{
+    List<OfertaAdocao> findByStatusAdocao(StatusAdocao statusAdocao);
 }
