@@ -14,6 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author ALUNO
  */
-public interface AdocaoRepository extends CrudRepository<OfertaAdocao, Long> {
+public interface OfertaAdocaoRepository extends CrudRepository<OfertaAdocao, Long> {
     List<OfertaAdocao> findByStatusAdocao(StatusAdocao statusAdocao);
 }

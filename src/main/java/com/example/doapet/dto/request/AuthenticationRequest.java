@@ -1,4 +1,4 @@
-package com.example.doapet.dto;
+package com.example.doapet.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

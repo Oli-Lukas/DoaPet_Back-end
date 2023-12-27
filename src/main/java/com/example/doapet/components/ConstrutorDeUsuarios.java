@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import com.example.doapet.model.TipoUsuario;
 import com.example.doapet.model.Usuario;
+import com.example.doapet.repository.EventoRepository;
+import com.example.doapet.repository.OfertaAdocaoRepository;
+import com.example.doapet.repository.SolicitacaoAdocaoRepository;
 import com.example.doapet.repository.UsuarioRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -17,13 +20,30 @@ public class ConstrutorDeUsuarios {
   private final PasswordEncoder passwordEncoder;
   private final UsuarioRepository usuarioRepository;
 
+  private final EventoRepository eventoRepository;
+  private final SolicitacaoAdocaoRepository solicitacoesAdocaoRepository;
+  private final OfertaAdocaoRepository ofertaAdocaoRepository;
+
   @PostConstruct
   public void init() {
 
+    this.deletarEventos();
+    this.deletarSolicitacoesAdocao();
+    this.deletarOfertasAdocao();
     this.deletarTodosOsUsuarios();
+    
     this.adicionarUsuariosIndividuais();
     this.adicionarUsuariosOngs();
   }
+
+  private void deletarEventos()
+  { eventoRepository.deleteAll(); }
+
+  private void deletarSolicitacoesAdocao()
+  { solicitacoesAdocaoRepository.deleteAll(); }
+
+  private void deletarOfertasAdocao()
+  { ofertaAdocaoRepository.deleteAll(); }
 
   private void deletarTodosOsUsuarios()
   { usuarioRepository.deleteAll(); }

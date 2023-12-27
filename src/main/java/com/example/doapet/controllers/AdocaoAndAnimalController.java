@@ -4,12 +4,12 @@
  */
 package com.example.doapet.controllers;
 
-import com.example.doapet.dto.AdocaoDTO;
+import com.example.doapet.dto.request.OfertaAdocaoRequest;
 import com.example.doapet.model.Animal;
 import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.StatusAdocao;
 import com.example.doapet.model.Usuario;
-import com.example.doapet.repository.AdocaoRepository;
+import com.example.doapet.repository.OfertaAdocaoRepository;
 import com.example.doapet.repository.AnimalRepository;
 import com.example.doapet.repository.UsuarioRepository;
 
@@ -20,14 +20,15 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,14 +39,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdocaoAndAnimalController {
 
     private final UsuarioRepository usuarioRepository;
-    private final AdocaoRepository adocaoRepository;
+    private final OfertaAdocaoRepository adocaoRepository;
     private final AnimalRepository animalRepository;
 
     @PostMapping("/oferta")
     @PreAuthorize("hasAnyAuthority('individual', 'ong')")
-    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@ModelAttribute AdocaoDTO adocaoDTO) throws IOException, SQLException
+    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@RequestBody OfertaAdocaoRequest ofertaAdocaoRequest) throws IOException, SQLException
     {
-        System.out.println("Executou!!!");
         UserDetails userDetails = (UserDetails) SecurityContextHolder
                                                     .getContext()
                                                     .getAuthentication()
@@ -53,21 +53,21 @@ public class AdocaoAndAnimalController {
         
         Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername()).get();
         
-        byte bytes[] = adocaoDTO.fotoAnimal().getBytes();
+        byte bytes[] = ofertaAdocaoRequest.getFotoAnimal().getBytes();
         Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
 
         Animal currentAnimal = new Animal(
-            adocaoDTO.nomeAnimal(),
-            adocaoDTO.especieAnimal(),
-            adocaoDTO.racaAnimal(),
-            adocaoDTO.pesoAnimal(),
-            adocaoDTO.idadeAnimal(),
-            adocaoDTO.descricaoAnimal(),
+            ofertaAdocaoRequest.getNomeAnimal(),
+            ofertaAdocaoRequest.getEspecieAnimal(),
+            ofertaAdocaoRequest.getRacaAnimal(),
+            ofertaAdocaoRequest.getPesoAnimal(),
+            ofertaAdocaoRequest.getIdadeAnimal(),
+            ofertaAdocaoRequest.getDescricaoAnimal(),
             blob
         );
         OfertaAdocao currentAdocao = new OfertaAdocao(
-            adocaoDTO.tituloAdocao(),
-            adocaoDTO.descricaoAdocao(),
+            ofertaAdocaoRequest.getTituloAdocao(),
+            ofertaAdocaoRequest.getDescricaoAdocao(),
             currentUsuario,
             currentAnimal
         );

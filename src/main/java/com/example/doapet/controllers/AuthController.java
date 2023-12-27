@@ -4,9 +4,9 @@
  */
 package com.example.doapet.controllers;
 
-import com.example.doapet.dto.AuthenticationRequest;
-import com.example.doapet.dto.AuthenticationResponse;
-import com.example.doapet.dto.RegisterRequest;
+import com.example.doapet.dto.request.AuthenticationRequest;
+import com.example.doapet.dto.request.RegisterRequest;
+import com.example.doapet.dto.response.AuthenticationResponse;
 import com.example.doapet.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 

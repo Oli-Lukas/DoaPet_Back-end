@@ -5,9 +5,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.doapet.dto.AuthenticationRequest;
-import com.example.doapet.dto.AuthenticationResponse;
-import com.example.doapet.dto.RegisterRequest;
+import com.example.doapet.dto.request.AuthenticationRequest;
+import com.example.doapet.dto.request.RegisterRequest;
+import com.example.doapet.dto.response.AuthenticationResponse;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.UsuarioRepository;
 
