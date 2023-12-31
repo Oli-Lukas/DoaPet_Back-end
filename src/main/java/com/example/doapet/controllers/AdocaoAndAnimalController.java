@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.doapet.controllers;
 
-import com.example.doapet.dto.request.OfertaAdocaoRequest;
+import com.example.doapet.dto.request.CadastrarOfertaDeAdocaoRequest;
 import com.example.doapet.model.Animal;
 import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.StatusAdocao;
@@ -20,13 +16,12 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,9 +38,11 @@ public class AdocaoAndAnimalController {
     private final AnimalRepository animalRepository;
 
     @PostMapping("/oferta")
-    @PreAuthorize("hasAnyAuthority('individual', 'ong')")
-    public ResponseEntity<Void> cadastrarAdocaoEAnimal(@RequestBody OfertaAdocaoRequest ofertaAdocaoRequest) throws IOException, SQLException
-    {
+    public ResponseEntity<Void> cadastrarOfertaDeAdocao(
+        @RequestBody @ModelAttribute CadastrarOfertaDeAdocaoRequest ofertaAdocaoRequest
+
+    ) throws IOException, SQLException {
+
         UserDetails userDetails = (UserDetails) SecurityContextHolder
                                                     .getContext()
                                                     .getAuthentication()
@@ -81,9 +78,9 @@ public class AdocaoAndAnimalController {
     }
     
     @GetMapping("/adocoes-disponiveis")
-    public ResponseEntity<List<OfertaAdocao>> getAdocoesDisponiveis() {
+    public ResponseEntity<List<OfertaAdocao>> listarOfertasDeAdocaoPendentes() {
+
         List<OfertaAdocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
         return ResponseEntity.status(HttpStatus.OK).body(currentAdocoes);
     }
-
 }

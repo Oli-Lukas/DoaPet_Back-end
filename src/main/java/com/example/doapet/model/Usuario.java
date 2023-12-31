@@ -8,6 +8,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -58,7 +59,9 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "organizador")
     private List<Evento> eventos;
     
-    @OneToMany(mappedBy = "donoDaDivulgacao")
+    @OneToMany(
+        mappedBy = "donoDaDivulgacao"
+    )
     private List<OfertaAdocao> divulgacoesDeAdocao;
 
     public Usuario(

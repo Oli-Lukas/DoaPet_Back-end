@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.doapet.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +19,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @Builder
@@ -45,13 +45,25 @@ public class OfertaAdocao {
     @Column(nullable = true)
     private String localizacao;
     
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(
+        fetch = FetchType.LAZY
+    )
     private Usuario donoDaDivulgacao;
     
-    @OneToMany(mappedBy = "ofertaAdocao")
+    @JsonIgnore
+    @OneToMany(
+        mappedBy = "ofertaAdocao",
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL
+    )
     private List<SolicitacaoAdocao> solicitacoesDeAdocao;
     
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL
+    )
     private Animal animalAdocao;
 
     public OfertaAdocao(

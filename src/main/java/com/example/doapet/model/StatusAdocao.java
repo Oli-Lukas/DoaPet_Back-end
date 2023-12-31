@@ -9,17 +9,6 @@ package com.example.doapet.model;
  * @author euluc
  */
 public enum StatusAdocao {
-    
-    PENDENTE("PENDENTE"),
-    APROVADO("APROVADO");
-    
-    private String status;
-
-    private StatusAdocao(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
-        return status;
-    }
+    PENDENTE,
+    APROVADO
 }

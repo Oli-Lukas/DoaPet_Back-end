@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OfertaAdocaoRequest {
+public class CadastrarOfertaDeAdocaoRequest {
 
   private String  tituloAdocao;
   private String  descricaoAdocao;
