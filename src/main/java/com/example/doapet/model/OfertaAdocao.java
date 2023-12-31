@@ -79,4 +79,6 @@ public class OfertaAdocao {
         this.localizacao = this.donoDaDivulgacao.getEndereco();
         this.animalAdocao = animalAdocao;
     }
+
+    
 }

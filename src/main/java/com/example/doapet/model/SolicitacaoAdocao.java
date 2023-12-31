@@ -4,6 +4,8 @@
  */
 package com.example.doapet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,11 +33,18 @@ public class SolicitacaoAdocao {
     @Enumerated(EnumType.STRING)
     private StatusSolicitacao statusSolicitacao;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario novoDono;
     
-    @ManyToOne(
-        fetch = FetchType.LAZY
-    )
+    @ManyToOne(fetch = FetchType.LAZY)
     private OfertaAdocao ofertaAdocao;
+
+    public SolicitacaoAdocao(
+        StatusSolicitacao statusSolicitacao,
+        Usuario novoDono
+    ) {
+        this.statusSolicitacao = statusSolicitacao;
+        this.novoDono = novoDono;
+    }
 }
