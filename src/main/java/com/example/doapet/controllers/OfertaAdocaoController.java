@@ -75,7 +75,7 @@ public class OfertaAdocaoController {
         adocaoRepository.save(currentAdocao);
         
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
     
