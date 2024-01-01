@@ -1,6 +1,7 @@
 package com.example.doapet.controllers;
 
 import com.example.doapet.dto.request.CadastrarOfertaDeAdocaoRequest;
+import com.example.doapet.dto.response.OfertaAdocaoResponse;
 import com.example.doapet.model.Animal;
 import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.StatusAdocao;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,9 +80,14 @@ public class OfertaAdocaoController {
     }
     
     @GetMapping("/")
-    public ResponseEntity<List<OfertaAdocao>> listarOfertasDeAdocaoPendentes() {
+    public ResponseEntity<List<OfertaAdocaoResponse>> listarOfertasDeAdocaoPendentes() {
 
+        List<OfertaAdocaoResponse> response = new ArrayList<>();
         List<OfertaAdocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
-        return ResponseEntity.status(HttpStatus.OK).body(currentAdocoes);
+
+        for (OfertaAdocao ofertaAdocao: currentAdocoes)
+            response.add(new OfertaAdocaoResponse(ofertaAdocao));
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
