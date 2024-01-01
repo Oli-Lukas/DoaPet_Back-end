@@ -84,19 +84,23 @@ public class SolicitacaoAdocaoController {
   }
 
   @GetMapping("/pending/{idOfertaAdocao}")
-  public ResponseEntity<List<SolicitacaoAdocao>> listarSolicitacoesDeAdocaoPendentes(
+  public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocaoPendentes(
     @PathVariable Long idOfertaAdocao
   ) {
 
+    List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
     Predicate<SolicitacaoAdocao> byStatusSolicitacao = solicitacao -> solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE;
 
     OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
     List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
     List<SolicitacaoAdocao> solicitacoesPendentes = solicitacoes.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
 
+    for(SolicitacaoAdocao solicitacao: solicitacoesPendentes)
+      response.add(new SolicitacaoAdocaoResponse(solicitacao));
+
     return ResponseEntity
             .status(HttpStatus.OK)
-            .body(solicitacoesPendentes);
+            .body(response);
   }
 
   @PatchMapping("/accept/{idOfertaAdocao}/{idSolicitacaoAdocao}")
