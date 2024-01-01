@@ -2,6 +2,7 @@ package com.example.doapet.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -49,19 +50,25 @@ public class SolicitacaoAdocaoController {
                                               .getAuthentication()
                                               .getPrincipal();
     
-    Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername()).get();
-    OfertaAdocao ofertaAdocao = ofertaAdocaoRepository.findById(idOfertaAdocao).get();
+    Optional<Usuario> optionalCurrentUser        = this.usuarioRepository.findByEmail(userDetails.getUsername());
+    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
 
-    SolicitacaoAdocao solicitacaoAdocao = new SolicitacaoAdocao(StatusSolicitacao.PENDENTE, currentUsuario);
+    if (optionalCurrentUser.isEmpty() || optionalAdoptionOffer.isEmpty())
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    
+    Usuario currentUser = optionalCurrentUser.get();
+    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-    solicitacaoAdocao.setOfertaAdocao(ofertaAdocao);
-    ofertaAdocao.getSolicitacoesDeAdocao().add(solicitacaoAdocao);
+    SolicitacaoAdocao adoptionRequest = new SolicitacaoAdocao(StatusSolicitacao.PENDENTE, currentUser);
 
-    solicitacaoAdocaoRepository.save(solicitacaoAdocao);
-    ofertaAdocaoRepository.save(ofertaAdocao);
+    adoptionRequest.setOfertaAdocao(adoptionOffer);
+    adoptionOffer.getSolicitacoesDeAdocao().add(adoptionRequest);
+
+    solicitacaoAdocaoRepository.save(adoptionRequest);
+    ofertaAdocaoRepository.save(adoptionOffer);
 
     return ResponseEntity
-            .status(HttpStatus.OK)
+            .status(HttpStatus.CREATED)
             .build();
   }
 
