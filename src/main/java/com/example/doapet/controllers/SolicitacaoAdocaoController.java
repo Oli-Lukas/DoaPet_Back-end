@@ -1,5 +1,6 @@
 package com.example.doapet.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.doapet.dto.response.SolicitacaoAdocaoResponse;
 import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.SolicitacaoAdocao;
 import com.example.doapet.model.StatusAdocao;
@@ -64,16 +66,21 @@ public class SolicitacaoAdocaoController {
   }
 
   @GetMapping("/{idOfertaAdocao}")
-  public ResponseEntity<List<SolicitacaoAdocao>> listarSolicitacoesDeAdocao(
+  public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocao(
     @PathVariable Long idOfertaAdocao
   ) {
+
+    List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
 
     OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
     List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
 
+    for(SolicitacaoAdocao solicitacao: solicitacoes)
+      response.add(new SolicitacaoAdocaoResponse(solicitacao));
+
     return ResponseEntity
             .status(HttpStatus.OK)
-            .body(solicitacoes);
+            .body(response);
   }
 
   @GetMapping("/pending/{idOfertaAdocao}")
