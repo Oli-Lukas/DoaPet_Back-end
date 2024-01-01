@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.doapet.model.OfertaAdocao;
 import com.example.doapet.model.SolicitacaoAdocao;
+import com.example.doapet.model.StatusAdocao;
 import com.example.doapet.model.StatusSolicitacao;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.OfertaAdocaoRepository;
@@ -70,5 +72,37 @@ public class SolicitacaoAdocaoController {
     return ResponseEntity
             .status(HttpStatus.OK)
             .body(solicitacoes);
+  }
+
+  // @GetMapping("/pending/{idOfertaAdocao}")
+  // public ResponseEntity<List<SolicitacaoAdocao>> listarSolicitacoesDeAdocaoPendentes(
+  //   @PathVariable Long idOfertaAdocao
+  // ) {
+  //   OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
+  //   List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
+  //   List<SolicitacaoAdocao> solicitacoesPendentes = solicitacoes
+  //                                                     .stream()
+  //                                                     .filter(solicitacao -> )
+  //   return null;
+  // }
+
+  @PatchMapping("/accept/{idOfertaAdocao}/{idSolicitacaoAdocao}")
+  public ResponseEntity<Void> aceitarSolicitacaoAdocao(
+    @PathVariable Long idOfertaAdocao,
+    @PathVariable Long idSolicitacaoAdocao
+  ) {
+
+    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
+    SolicitacaoAdocao solicitacaoAdocao = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao).get();
+
+    solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.APROVADO);
+    this.solicitacaoAdocaoRepository.save(solicitacaoAdocao);
+
+    ofertaAdocao.setStatusAdocao(StatusAdocao.APROVADO);
+    this.ofertaAdocaoRepository.save(ofertaAdocao);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .build();
   }
 }
