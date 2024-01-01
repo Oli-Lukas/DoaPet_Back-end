@@ -101,12 +101,15 @@ public class SolicitacaoAdocaoController {
     List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
     Predicate<SolicitacaoAdocao> byStatusSolicitacao = solicitacao -> solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE;
 
-    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
-    List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
-    List<SolicitacaoAdocao> solicitacoesPendentes = solicitacoes.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
+    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+    if (optionalAdoptionOffer.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-    for(SolicitacaoAdocao solicitacao: solicitacoesPendentes)
-      response.add(new SolicitacaoAdocaoResponse(solicitacao));
+    List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
+    List<SolicitacaoAdocao> pendingAdoptionsRequests = adoptionsRequests.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
+
+    for(SolicitacaoAdocao adoptionRequest: pendingAdoptionsRequests)
+      response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
 
     return ResponseEntity
             .status(HttpStatus.OK)
