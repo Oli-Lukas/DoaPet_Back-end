@@ -1,6 +1,8 @@
 package com.example.doapet.controllers;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,17 +76,21 @@ public class SolicitacaoAdocaoController {
             .body(solicitacoes);
   }
 
-  // @GetMapping("/pending/{idOfertaAdocao}")
-  // public ResponseEntity<List<SolicitacaoAdocao>> listarSolicitacoesDeAdocaoPendentes(
-  //   @PathVariable Long idOfertaAdocao
-  // ) {
-  //   OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
-  //   List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
-  //   List<SolicitacaoAdocao> solicitacoesPendentes = solicitacoes
-  //                                                     .stream()
-  //                                                     .filter(solicitacao -> )
-  //   return null;
-  // }
+  @GetMapping("/pending/{idOfertaAdocao}")
+  public ResponseEntity<List<SolicitacaoAdocao>> listarSolicitacoesDeAdocaoPendentes(
+    @PathVariable Long idOfertaAdocao
+  ) {
+
+    Predicate<SolicitacaoAdocao> byStatusSolicitacao = solicitacao -> solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE;
+
+    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
+    List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
+    List<SolicitacaoAdocao> solicitacoesPendentes = solicitacoes.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(solicitacoesPendentes);
+  }
 
   @PatchMapping("/accept/{idOfertaAdocao}/{idSolicitacaoAdocao}")
   public ResponseEntity<Void> aceitarSolicitacaoAdocao(
