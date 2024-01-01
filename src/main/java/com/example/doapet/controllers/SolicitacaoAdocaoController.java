@@ -105,4 +105,21 @@ public class SolicitacaoAdocaoController {
             .status(HttpStatus.OK)
             .build();
   }
+
+  @PatchMapping("/reject/{idOfertaAdocao}/{idSolicitacaoAdocao}")
+  public ResponseEntity<Void> rejeitarSolicitacaoAdocao(
+    @PathVariable Long idOfertaAdocao,
+    @PathVariable Long idSolicitacaoAdocao
+  ) {
+
+    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
+    SolicitacaoAdocao solicitacaoAdocao = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao).get();
+
+    solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.REJEITADO);
+    this.solicitacaoAdocaoRepository.save(solicitacaoAdocao);
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .build();
+  }
 }
