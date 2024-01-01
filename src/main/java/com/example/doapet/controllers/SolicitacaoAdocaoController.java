@@ -79,11 +79,14 @@ public class SolicitacaoAdocaoController {
 
     List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
 
-    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
-    List<SolicitacaoAdocao> solicitacoes = ofertaAdocao.getSolicitacoesDeAdocao();
+    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+    if (optionalAdoptionOffer.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-    for(SolicitacaoAdocao solicitacao: solicitacoes)
-      response.add(new SolicitacaoAdocaoResponse(solicitacao));
+    List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
+
+    for(SolicitacaoAdocao adoptionRequest: adoptionsRequests)
+      response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
 
     return ResponseEntity
             .status(HttpStatus.OK)
