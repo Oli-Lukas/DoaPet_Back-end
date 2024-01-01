@@ -122,14 +122,19 @@ public class SolicitacaoAdocaoController {
     @PathVariable Long idSolicitacaoAdocao
   ) {
 
-    OfertaAdocao ofertaAdocao = this.ofertaAdocaoRepository.findById(idOfertaAdocao).get();
-    SolicitacaoAdocao solicitacaoAdocao = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao).get();
+    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+    Optional<SolicitacaoAdocao> optionalAdoptionRequest = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao);
 
-    solicitacaoAdocao.setStatusSolicitacao(StatusSolicitacao.APROVADO);
-    this.solicitacaoAdocaoRepository.save(solicitacaoAdocao);
+    if (optionalAdoptionOffer.isEmpty() || optionalAdoptionRequest.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-    ofertaAdocao.setStatusAdocao(StatusAdocao.APROVADO);
-    this.ofertaAdocaoRepository.save(ofertaAdocao);
+    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+    SolicitacaoAdocao adoptionRequest = optionalAdoptionRequest.get();
+
+    adoptionRequest.setStatusSolicitacao(StatusSolicitacao.APROVADO);
+    this.solicitacaoAdocaoRepository.save(adoptionRequest);
+
+    adoptionOffer.setStatusAdocao(StatusAdocao.APROVADO);
+    this.ofertaAdocaoRepository.save(adoptionOffer);
 
     return ResponseEntity
             .status(HttpStatus.OK)
