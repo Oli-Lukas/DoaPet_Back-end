@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.doapet.dto.request.AtualizarSenhaRequest;
 import com.example.doapet.dto.request.UsuarioRequest;
 import com.example.doapet.dto.response.UsuarioResponse;
 import com.example.doapet.model.Usuario;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
   
   private final UsuarioRepository usuarioRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @GetMapping("/{idUsuario}")
   public ResponseEntity<UsuarioResponse> lerDadosUsuario(@PathVariable Long idUsuario) {
@@ -49,6 +52,25 @@ public class UsuarioController {
 
     request.merge(usuario);
     this.usuarioRepository.save(usuario);
+
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @PatchMapping("/change-password/{idUsuario}")
+  public ResponseEntity<Void> atualizarSenhaDeUsuario(
+    @PathVariable Long idUsuario,
+    @RequestBody AtualizarSenhaRequest request
+  ) {
+
+    Optional<Usuario> optionalUsuario = this.usuarioRepository.findById(idUsuario);
+    if (optionalUsuario.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    Usuario usuario = optionalUsuario.get();
+
+    if (passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenha()))
+    {
+      usuario.setSenha(passwordEncoder.encode(request.getNovaSenha()));
+      this.usuarioRepository.save(usuario);
+    }
 
     return ResponseEntity.status(HttpStatus.OK).build();
   }
