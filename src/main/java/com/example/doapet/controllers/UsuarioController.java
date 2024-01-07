@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +40,21 @@ public class UsuarioController {
     Usuario usuario = optionalUsuario.get();
 
     return ResponseEntity.status(HttpStatus.OK).body(new UsuarioResponse(usuario));
+  }
+
+  @GetMapping("/")
+  public ResponseEntity<UsuarioResponse> lerDadosDoPortadorDoToken() {
+
+    UserDetails userDetails =(UserDetails) SecurityContextHolder
+                                            .getContext()
+                                            .getAuthentication()
+                                            .getPrincipal();
+
+    Optional<Usuario> optionalBearerToken = this.usuarioRepository.findByEmail(userDetails.getUsername());
+    if (optionalBearerToken.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    Usuario bearerToken = optionalBearerToken.get();
+
+    return ResponseEntity.status(HttpStatus.OK).body(new UsuarioResponse(bearerToken));
   }
 
   @PatchMapping("/{idUsuario}")

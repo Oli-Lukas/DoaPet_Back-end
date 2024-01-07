@@ -28,6 +28,7 @@ public class SecurityConfiguration {
             .authorizeRequests()
               .requestMatchers(HttpMethod.POST  , "/auth/login").permitAll()
               .requestMatchers(HttpMethod.POST  , "/auth/register").permitAll()
+              .requestMatchers(HttpMethod.GET   , "/usuario/").authenticated()
               .requestMatchers(HttpMethod.GET   , "/usuario/**").authenticated()
               .requestMatchers(HttpMethod.PATCH , "/usuario/**").authenticated()
               .requestMatchers(HttpMethod.PATCH , "/usuario/change-password/**").authenticated()
