@@ -33,6 +33,7 @@ public class SecurityConfiguration {
               .requestMatchers(HttpMethod.PATCH , "/usuario/change-password/**").authenticated()
               .requestMatchers(HttpMethod.POST  , "/oferta-adocao/cadastrar").authenticated()
               .requestMatchers(HttpMethod.GET   , "/oferta-adocao/").authenticated()
+              .requestMatchers(HttpMethod.GET   , "/oferta-adocao/**").authenticated()
               .requestMatchers(HttpMethod.POST  , "/solicitacao-adocao/**").authenticated()
               .requestMatchers(HttpMethod.GET   , "/solicitacao-adocao/**").authenticated()
               .requestMatchers(HttpMethod.GET   , "/solicitacao-adocao/pending/**").authenticated()

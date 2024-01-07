@@ -17,6 +17,8 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,6 +90,16 @@ public class OfertaAdocaoController {
 
         for (OfertaAdocao ofertaAdocao: currentAdocoes)
             response.add(new OfertaAdocaoResponse(ofertaAdocao));
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{idOfertaAdocao}")
+    public ResponseEntity<OfertaAdocaoResponse> lerOfertaAdocao(@PathVariable Long idOfertaAdocao) {
+
+        Optional<OfertaAdocao> optionalOfertaAdocao = this.adocaoRepository.findById(idOfertaAdocao);
+        if (optionalOfertaAdocao.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        OfertaAdocaoResponse response = new OfertaAdocaoResponse(optionalOfertaAdocao.get());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
