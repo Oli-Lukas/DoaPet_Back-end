@@ -40,7 +40,7 @@ public class SecurityConfiguration {
               .requestMatchers(HttpMethod.GET   , "/solicitacao-adocao/pending/**").authenticated()
               .requestMatchers(HttpMethod.PATCH , "/solicitacao-adocao/accept/**").authenticated()
               .requestMatchers(HttpMethod.PATCH , "/solicitacao-adocao/reject/**").authenticated()
-              .requestMatchers(HttpMethod.POST  , "/evento").authenticated()
+              .requestMatchers(HttpMethod.POST  , "/evento/").authenticated()
               .requestMatchers(HttpMethod.DELETE, "/evento/**").authenticated()
               .requestMatchers(HttpMethod.GET   , "/evento/**").authenticated()
               .anyRequest().denyAll()
