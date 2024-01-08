@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +57,8 @@ public class OfertaAdocaoController {
         
         Usuario currentUsuario = (Usuario) usuarioRepository.findByEmail(userDetails.getUsername()).get();
         
-        byte bytes[] = ofertaAdocaoRequest.getFotoAnimal().getBytes();
-        Blob blob    = new javax.sql.rowset.serial.SerialBlob(bytes);
+        byte bytes[] = Base64.getEncoder().encode(ofertaAdocaoRequest.getFotoAnimal().getBytes());
+        Blob blob    = new SerialBlob(bytes);
 
         Animal currentAnimal = new Animal(
             ofertaAdocaoRequest.getNomeAnimal(),
@@ -83,7 +85,7 @@ public class OfertaAdocaoController {
     }
     
     @GetMapping("/")
-    public ResponseEntity<List<OfertaAdocaoResponse>> listarOfertasDeAdocaoPendentes() {
+    public ResponseEntity<List<OfertaAdocaoResponse>> listarOfertasDeAdocaoPendentes() throws SQLException {
 
         List<OfertaAdocaoResponse> response = new ArrayList<>();
         List<OfertaAdocao> currentAdocoes = adocaoRepository.findByStatusAdocao(StatusAdocao.PENDENTE);
@@ -95,7 +97,7 @@ public class OfertaAdocaoController {
     }
 
     @GetMapping("/{idOfertaAdocao}")
-    public ResponseEntity<OfertaAdocaoResponse> lerOfertaAdocao(@PathVariable Long idOfertaAdocao) {
+    public ResponseEntity<OfertaAdocaoResponse> lerOfertaAdocao(@PathVariable Long idOfertaAdocao) throws SQLException {
 
         Optional<OfertaAdocao> optionalOfertaAdocao = this.adocaoRepository.findById(idOfertaAdocao);
         if (optionalOfertaAdocao.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -121,4 +122,24 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id) &&
+               Objects.equals(nome, usuario.nome) &&
+               Objects.equals(email, usuario.email) &&
+               Objects.equals(senha, usuario.senha) &&
+               tipoUsuario == usuario.tipoUsuario &&
+               Objects.equals(endereco, usuario.endereco) &&
+               Objects.equals(numeroTelefone, usuario.numeroTelefone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, email, senha, tipoUsuario, endereco, numeroTelefone);
+    }
 }
+

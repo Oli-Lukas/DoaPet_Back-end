@@ -36,130 +36,149 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SolicitacaoAdocaoController {
 
-  private final SolicitacaoAdocaoRepository solicitacaoAdocaoRepository;
-  private final OfertaAdocaoRepository ofertaAdocaoRepository;
-  private final UsuarioRepository usuarioRepository;
+    private final SolicitacaoAdocaoRepository solicitacaoAdocaoRepository;
+    private final OfertaAdocaoRepository ofertaAdocaoRepository;
+    private final UsuarioRepository usuarioRepository;
 
-  @PostMapping("/{idOfertaAdocao}")
-  public ResponseEntity<Void> cadastrarSolicitacaoDeAdocao(
-    @PathVariable Long idOfertaAdocao
-  ) {
+    @PostMapping("/{idOfertaAdocao}")
+    public ResponseEntity<Void> cadastrarSolicitacaoDeAdocao(
+            @PathVariable Long idOfertaAdocao
+    ) {
 
-    UserDetails userDetails = (UserDetails) SecurityContextHolder
-                                              .getContext()
-                                              .getAuthentication()
-                                              .getPrincipal();
-    
-    Optional<Usuario> optionalCurrentUser        = this.usuarioRepository.findByEmail(userDetails.getUsername());
-    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-    if (optionalCurrentUser.isEmpty() || optionalAdoptionOffer.isEmpty())
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    
-    Usuario currentUser = optionalCurrentUser.get();
-    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+        Optional<Usuario> optionalCurrentUser = this.usuarioRepository.findByEmail(userDetails.getUsername());
+        Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
 
-    SolicitacaoAdocao adoptionRequest = new SolicitacaoAdocao(StatusSolicitacao.PENDENTE, currentUser);
+        if (optionalCurrentUser.isEmpty() || optionalAdoptionOffer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-    adoptionRequest.setOfertaAdocao(adoptionOffer);
-    adoptionOffer.getSolicitacoesDeAdocao().add(adoptionRequest);
+        Usuario currentUser = optionalCurrentUser.get();
+        OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-    solicitacaoAdocaoRepository.save(adoptionRequest);
-    ofertaAdocaoRepository.save(adoptionOffer);
+        if (!(adoptionOffer.getSolicitacoesDeAdocao().isEmpty())) {
+            for (SolicitacaoAdocao currentSA : adoptionOffer.getSolicitacoesDeAdocao()) {
+                if (currentUser.equals(currentSA.getNovoDono())) {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+                }
+            }
+        }
 
-    return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .build();
-  }
+        SolicitacaoAdocao adoptionRequest = new SolicitacaoAdocao(StatusSolicitacao.PENDENTE, currentUser);
 
-  @GetMapping("/{idOfertaAdocao}")
-  public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocao(
-    @PathVariable Long idOfertaAdocao
-  ) {
+        adoptionRequest.setOfertaAdocao(adoptionOffer);
+        adoptionOffer.getSolicitacoesDeAdocao().add(adoptionRequest);
 
-    List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
+        solicitacaoAdocaoRepository.save(adoptionRequest);
+        ofertaAdocaoRepository.save(adoptionOffer);
 
-    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
-    if (optionalAdoptionOffer.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
+    }
 
-    List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
+    @GetMapping("/{idOfertaAdocao}")
+    public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocao(
+            @PathVariable Long idOfertaAdocao
+    ) {
 
-    for(SolicitacaoAdocao adoptionRequest: adoptionsRequests)
-      response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
+        List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
 
-    return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(response);
-  }
+        Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+        if (optionalAdoptionOffer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-  @GetMapping("/pending/{idOfertaAdocao}")
-  public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocaoPendentes(
-    @PathVariable Long idOfertaAdocao
-  ) {
+        List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
 
-    List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
-    Predicate<SolicitacaoAdocao> byStatusSolicitacao = solicitacao -> solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE;
+        for (SolicitacaoAdocao adoptionRequest : adoptionsRequests) {
+            response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
+        }
 
-    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
-    if (optionalAdoptionOffer.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
 
-    List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
-    List<SolicitacaoAdocao> pendingAdoptionsRequests = adoptionsRequests.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
+    @GetMapping("/pending/{idOfertaAdocao}")
+    public ResponseEntity<List<SolicitacaoAdocaoResponse>> listarSolicitacoesDeAdocaoPendentes(
+            @PathVariable Long idOfertaAdocao
+    ) {
 
-    for(SolicitacaoAdocao adoptionRequest: pendingAdoptionsRequests)
-      response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
+        List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
+        Predicate<SolicitacaoAdocao> byStatusSolicitacao = solicitacao -> solicitacao.getStatusSolicitacao() == StatusSolicitacao.PENDENTE;
 
-    return ResponseEntity
-            .status(HttpStatus.OK)
-            .body(response);
-  }
+        Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+        if (optionalAdoptionOffer.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
 
-  @PatchMapping("/accept/{idOfertaAdocao}/{idSolicitacaoAdocao}")
-  public ResponseEntity<Void> aceitarSolicitacaoAdocao(
-    @PathVariable Long idOfertaAdocao,
-    @PathVariable Long idSolicitacaoAdocao
-  ) {
+        List<SolicitacaoAdocao> adoptionsRequests = adoptionOffer.getSolicitacoesDeAdocao();
+        List<SolicitacaoAdocao> pendingAdoptionsRequests = adoptionsRequests.stream().filter(byStatusSolicitacao).collect(Collectors.toList());
 
-    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
-    Optional<SolicitacaoAdocao> optionalAdoptionRequest = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao);
+        for (SolicitacaoAdocao adoptionRequest : pendingAdoptionsRequests) {
+            response.add(new SolicitacaoAdocaoResponse(adoptionRequest));
+        }
 
-    if (optionalAdoptionOffer.isEmpty() || optionalAdoptionRequest.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
 
-    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
-    SolicitacaoAdocao adoptionRequest = optionalAdoptionRequest.get();
+    @PatchMapping("/accept/{idOfertaAdocao}/{idSolicitacaoAdocao}")
+    public ResponseEntity<Void> aceitarSolicitacaoAdocao(
+            @PathVariable Long idOfertaAdocao,
+            @PathVariable Long idSolicitacaoAdocao
+    ) {
 
-    adoptionRequest.setStatusSolicitacao(StatusSolicitacao.APROVADO);
-    this.solicitacaoAdocaoRepository.save(adoptionRequest);
+        Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+        Optional<SolicitacaoAdocao> optionalAdoptionRequest = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao);
 
-    adoptionOffer.setStatusAdocao(StatusAdocao.APROVADO);
-    this.ofertaAdocaoRepository.save(adoptionOffer);
+        if (optionalAdoptionOffer.isEmpty() || optionalAdoptionRequest.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-    return ResponseEntity
-            .status(HttpStatus.OK)
-            .build();
-  }
+        OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+        SolicitacaoAdocao adoptionRequest = optionalAdoptionRequest.get();
 
-  @PatchMapping("/reject/{idOfertaAdocao}/{idSolicitacaoAdocao}")
-  public ResponseEntity<Void> rejeitarSolicitacaoAdocao(
-    @PathVariable Long idOfertaAdocao,
-    @PathVariable Long idSolicitacaoAdocao
-  ) {
+        adoptionRequest.setStatusSolicitacao(StatusSolicitacao.APROVADO);
+        this.solicitacaoAdocaoRepository.save(adoptionRequest);
 
-    Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
-    Optional<SolicitacaoAdocao> optionalAdoptionRequest = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao);
+        adoptionOffer.setStatusAdocao(StatusAdocao.APROVADO);
+        this.ofertaAdocaoRepository.save(adoptionOffer);
 
-    if (optionalAdoptionOffer.isEmpty() || optionalAdoptionRequest.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 
-    OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
-    SolicitacaoAdocao adoptionRequest = optionalAdoptionRequest.get();
+    @PatchMapping("/reject/{idOfertaAdocao}/{idSolicitacaoAdocao}")
+    public ResponseEntity<Void> rejeitarSolicitacaoAdocao(
+            @PathVariable Long idOfertaAdocao,
+            @PathVariable Long idSolicitacaoAdocao
+    ) {
 
-    adoptionRequest.setStatusSolicitacao(StatusSolicitacao.REJEITADO);
-    this.solicitacaoAdocaoRepository.save(adoptionRequest);
+        Optional<OfertaAdocao> optionalAdoptionOffer = this.ofertaAdocaoRepository.findById(idOfertaAdocao);
+        Optional<SolicitacaoAdocao> optionalAdoptionRequest = this.solicitacaoAdocaoRepository.findById(idSolicitacaoAdocao);
 
-    return ResponseEntity
-            .status(HttpStatus.OK)
-            .build();
-  }
+        if (optionalAdoptionOffer.isEmpty() || optionalAdoptionRequest.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        OfertaAdocao adoptionOffer = optionalAdoptionOffer.get();
+        SolicitacaoAdocao adoptionRequest = optionalAdoptionRequest.get();
+
+        adoptionRequest.setStatusSolicitacao(StatusSolicitacao.REJEITADO);
+        this.solicitacaoAdocaoRepository.save(adoptionRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 }
