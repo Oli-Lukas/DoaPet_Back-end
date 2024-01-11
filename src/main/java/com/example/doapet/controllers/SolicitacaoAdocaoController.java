@@ -181,4 +181,20 @@ public class SolicitacaoAdocaoController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @GetMapping("/byUser/accept/{idUsuario}")
+    public ResponseEntity<List<SolicitacaoAdocaoResponse>> solicitacoesAceitas(@PathVariable Long idUsuario) {
+
+        List<SolicitacaoAdocaoResponse> response = new ArrayList<>();
+
+        Optional<Usuario> optionalSolicitante = this.usuarioRepository.findById(idUsuario);
+        if (optionalSolicitante.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        Usuario solicitante = optionalSolicitante.get();
+
+        for (SolicitacaoAdocao solicitacao: solicitante.getSolicitacoes())
+            if (solicitacao.getStatusSolicitacao() == StatusSolicitacao.APROVADO)
+                response.add(new SolicitacaoAdocaoResponse(solicitacao));
+        
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }
