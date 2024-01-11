@@ -4,9 +4,11 @@ import com.example.doapet.dto.request.CadastrarOfertaDeAdocaoRequest;
 import com.example.doapet.dto.response.OfertaAdocaoResponse;
 import com.example.doapet.model.Animal;
 import com.example.doapet.model.OfertaAdocao;
+import com.example.doapet.model.SolicitacaoAdocao;
 import com.example.doapet.model.StatusAdocao;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.OfertaAdocaoRepository;
+import com.example.doapet.repository.SolicitacaoAdocaoRepository;
 import com.example.doapet.repository.AnimalRepository;
 import com.example.doapet.repository.UsuarioRepository;
 
@@ -43,6 +45,7 @@ public class OfertaAdocaoController {
     private final UsuarioRepository usuarioRepository;
     private final OfertaAdocaoRepository adocaoRepository;
     private final AnimalRepository animalRepository;
+    private final SolicitacaoAdocaoRepository solicitacaoRepository;
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Void> cadastrarOfertaDeAdocao(
@@ -104,5 +107,20 @@ public class OfertaAdocaoController {
         OfertaAdocaoResponse response = new OfertaAdocaoResponse(optionalOfertaAdocao.get());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/byAdoptionRequest/{idSolicitacaoAdocao}")
+    public ResponseEntity<OfertaAdocaoResponse> lerOfertaAdocaoPorSolicitacaoAdocao(@PathVariable Long idSolicitacaoAdocao) throws SQLException {
+
+        Optional<SolicitacaoAdocao> optionalSolicitacaoAdocao = this.solicitacaoRepository.findById(idSolicitacaoAdocao);
+        if (optionalSolicitacaoAdocao.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        SolicitacaoAdocao solicitacaoAdocao = optionalSolicitacaoAdocao.get();
+
+        Iterable<OfertaAdocao> ofertasDeAdocao = this.adocaoRepository.findAll();
+        for (OfertaAdocao ofertaAdocao: ofertasDeAdocao)
+            if (ofertaAdocao.getSolicitacoesDeAdocao().contains(solicitacaoAdocao))
+                return ResponseEntity.status(HttpStatus.OK).body(new OfertaAdocaoResponse(ofertaAdocao));
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

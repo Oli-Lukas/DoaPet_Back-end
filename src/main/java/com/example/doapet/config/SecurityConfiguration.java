@@ -35,6 +35,7 @@ public class SecurityConfiguration {
               .requestMatchers(HttpMethod.POST  , "/oferta-adocao/cadastrar").authenticated()
               .requestMatchers(HttpMethod.GET   , "/oferta-adocao/").authenticated()
               .requestMatchers(HttpMethod.GET   , "/oferta-adocao/**").authenticated()
+              .requestMatchers(HttpMethod.GET   , "/oferta-adocao/byAdoptionRequest/**").authenticated()
               .requestMatchers(HttpMethod.POST  , "/solicitacao-adocao/**").authenticated()
               .requestMatchers(HttpMethod.GET   , "/solicitacao-adocao/**").authenticated()
               .requestMatchers(HttpMethod.GET   , "/solicitacao-adocao/pending/**").authenticated()
