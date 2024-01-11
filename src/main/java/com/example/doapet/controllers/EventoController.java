@@ -87,4 +87,14 @@ public class EventoController {
     
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
+
+  @GetMapping("/{idEvento}")
+  public ResponseEntity<EventoResponse> lerEvento(@PathVariable Long idEvento) {
+
+    Optional<Evento> optionalEvento = this.eventoRepository.findById(idEvento);
+    if (optionalEvento.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    Evento evento = optionalEvento.get();
+
+    return ResponseEntity.status(HttpStatus.OK).body(new EventoResponse(evento));
+  }
 }
