@@ -1,5 +1,7 @@
 package com.example.doapet.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -13,11 +15,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.doapet.dto.request.AtualizarSenhaRequest;
 import com.example.doapet.dto.request.UsuarioRequest;
 import com.example.doapet.dto.response.UsuarioResponse;
+import com.example.doapet.model.TipoUsuario;
 import com.example.doapet.model.Usuario;
 import com.example.doapet.repository.UsuarioRepository;
 
@@ -55,6 +59,20 @@ public class UsuarioController {
     Usuario bearerToken = optionalBearerToken.get();
 
     return ResponseEntity.status(HttpStatus.OK).body(new UsuarioResponse(bearerToken));
+  }
+
+  @GetMapping("/userType")
+  public ResponseEntity<List<UsuarioResponse>> lerUsuarioPorTipo(@RequestParam String tipoUsuario) {
+
+    TipoUsuario userType = (tipoUsuario.equalsIgnoreCase("ONG")) ? TipoUsuario.ONG : TipoUsuario.INDIVIDUAL;
+
+    List<UsuarioResponse> response = new ArrayList<>();
+    List<Usuario> currentUsuarios = this.usuarioRepository.findByTipoUsuario(userType);
+
+    for (Usuario usuario: currentUsuarios)
+      response.add(new UsuarioResponse(usuario));
+    
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @PatchMapping("/{idUsuario}")
